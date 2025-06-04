@@ -1,0 +1,55 @@
+/* public/css/index.css */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar .nav-buttons a {
+  margin-left: 10px;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 80vh;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.cta-buttons a {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background: #fff;
+  color: #2575fc;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.hero-image img {
+  max-width: 400px;
+  border-radius: 10px;
+}

@@ -1,0 +1,241 @@
+/* Calendar Styles */
+.calendar-section {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.calendar-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.calendar-nav h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin: 0;
+  min-width: 200px;
+  text-align: center;
+}
+
+.calendar-view-options {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.calendar-view-options .btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: 0.9rem;
+}
+
+.calendar-view-options .btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--gray-200);
+  padding: 1px;
+}
+
+.calendar-day-header {
+  background: var(--gray-100);
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-weight: 500;
+  color: var(--gray-600);
+  font-size: 0.9rem;
+}
+
+.calendar-day {
+  background: white;
+  min-height: 120px;
+  padding: var(--spacing-sm);
+  position: relative;
+}
+
+.calendar-day.empty {
+  background: var(--gray-50);
+}
+
+.calendar-day .date {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: var(--border-radius-full);
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-xs);
+}
+
+.calendar-day .date.current {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 500;
+}
+
+.task-list {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--gray-200);
+}
+
+.task-list h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.task-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  background: var(--gray-50);
+  transition: var(--transition);
+}
+
+.task-item:hover {
+  background: var(--gray-100);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.pending {
+  background: var(--warning-color);
+}
+
+.status-dot.done {
+  background: var(--success-color);
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-content h4 {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--gray-700);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.task-date {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin: 0;
+}
+
+.task-date i {
+  font-size: 0.9rem;
+}
+
+.task-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  color: var(--gray-400);
+}
+
+.empty-state i {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .calendar-section {
+    background: var(--gray-50);
+  }
+
+  .calendar-grid {
+    background: var(--gray-300);
+  }
+
+  .calendar-day {
+    background: var(--gray-50);
+  }
+
+  .calendar-day.empty {
+    background: var(--gray-100);
+  }
+
+  .calendar-day-header {
+    background: var(--gray-200);
+    color: var(--text-color);
+  }
+
+  .task-item {
+    background: var(--gray-100);
+  }
+
+  .task-item:hover {
+    background: var(--gray-200);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .calendar-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .calendar-nav {
+    justify-content: space-between;
+  }
+
+  .calendar-view-options {
+    justify-content: center;
+  }
+
+  .calendar-day {
+    min-height: 80px;
+  }
+
+  .task-date {
+    display: none;
+  }
+} 

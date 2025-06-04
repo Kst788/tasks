@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyTask - Your Personal Task Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo"><strong>MyTask</strong></div>
+    <div class="nav-links">
+      <a href="/features">Features</a>
+      <a href="/auth/login">Login</a>
+      <a href="/auth/signup" class="btn btn-primary">Sign Up</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Simplify Your Life with MyTask</h1>
+      <p>Create, organize, and manage notes with ease — from any device.</p>
+      <button onclick="location.href='/auth/signup'" class="btn-primary">Get Started</button>
+      <button onclick="location.href='/learn-more'" class="btn-secondary">Learn More</button>
+    </div>
+    <div class="hero-image">
+      <img src="/images/taskimg.png" alt="App Screenshot" style="border-radius: 10px;" />
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="feature">
+      <h3>📝 Minimal Interface</h3>
+      <p>Focus only on what matters — your notes.</p>
+    </div>
+    <div class="feature">
+      <h3>🔐 Secure Login</h3>
+      <p>Your notes are safe and accessible only to you.</p>
+    </div>
+    <div class="feature">
+      <h3>📱 Fully Responsive</h3>
+      <p>Use it on mobile, tablet, or desktop — seamlessly.</p>
+    </div>
+    <div class="feature">
+      <h3>⚡ Fast & Reliable</h3>
+      <p>Quick loading, autosave, and efficient note handling.</p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Start taking control of your tasks today</h2>
+    <button onclick="location.href='/auth/signup'" class="btn-primary">Create an Account</button>
+  </section>
+
+<%- include('partials/footer') %>
+</body>
+
+</html>

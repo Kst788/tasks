@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyTask - Dashboard</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span>MyTask</span>
+        </div>
+        <button class="mobile-close" id="closeSidebar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/tasks" class="nav-item active">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="/settings" class="nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+        <a href="/auth/logout" class="nav-item text-error">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-container">
+        <header class="main-header">
+          <button class="mobile-menu" id="openSidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search tasks..." class="form-input">
+          </div>
+
+          <div class="header-actions">
+            <button class="btn btn-primary" id="newTaskBtn">
+              <i class="fas fa-plus"></i>
+              <span>New Task</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon pending">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Pending</h3>
+                <p class="stat-value">
+                  <%= tasks.filter(t=> t.status === 'pending').length %>
+                </p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon completed">
+                <i class="fas fa-check"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Completed</h3>
+                <p class="stat-value">
+                  <%= tasks.filter(t=> t.status === 'Done').length %>
+                </p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon total">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Total</h3>
+                <p class="stat-value">
+                  <%= tasks.length %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Add Section -->
+        <section class="quick-add-section">
+          <h3 class="section-title">
+            <i class="fas fa-bolt"></i>
+            Quick Add
+          </h3>
+          <div class="quick-tasks-grid">
+            <% const quickTasks=[ { title: "📘 Read a chapter" , desc: "From your textbook" }, {
+              title: "🧹 Clean your room" , desc: "10-minute tidy-up" }, { title: "🧺 Do laundry" ,
+              desc: "Wash, dry, fold" }, { title: "💧 Drink water" , desc: "Stay hydrated" }, { title: "📝 Review notes"
+              , desc: "Go over your lecture notes" } ]; %>
+
+              <% quickTasks.forEach(task=> { %>
+                <form action="/tasks/create" method="POST" class="quick-task-form">
+                  <input type="hidden" name="title" value="<%= task.title %>">
+                  <input type="hidden" name="description" value="<%= task.desc %>">
+                  <input type="hidden" name="status" value="pending">
+                  <button type="submit" class="quick-task-btn">
+                    <span class="task-emoji">
+                      <%= task.title.split(' ')[0] %></span>
+                  <div class="task-info">
+                    <strong><%= task.title.split(' ').slice(1).join(' ') %></strong>
+                    <small><%= task.desc %></small>
+                  </div>
+                </button>
+              </form>
+            <% }) %>
+          </div>
+        </section>
+
+        <!-- Tasks Section -->
+        <section class="tasks-section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-list"></i>
+              Your Tasks
+            </h3>
+          </div>
+
+          <% if (tasks.length > 0) { %>
+            <div class="tasks-grid">
+              <% tasks.forEach(task => { %>
+                <div class="task-card">
+                  <div class="task-header">
+                    <span class="status-badge <%= task.status === ' Done' ? 'done' : 'pending' %>">
+                        <%= task.status || 'Pending' %>
+                    </span>
+                    <div class="task-actions">
+                      <a href="/tasks/edit/<%= task.id %>" class="btn-icon" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <a href="/tasks/delete/<%= task.id %>" class="btn-icon" title="Delete">
+                        <i class="fas fa-trash"></i>
+                      </a>
+                    </div>
+          </div>
+
+          <div class="task-content">
+            <h4 class="task-title">
+              <%= task.title %>
+            </h4>
+            <p class="task-description">
+              <%= task.description || 'No description' %>
+            </p>
+
+            <% if (task.due_date) { %>
+              <div class="task-due-date">
+                <i class="fas fa-calendar-day"></i>
+                <span>
+                  <%= new Date(task.due_date).toLocaleString() %>
+                </span>
+              </div>
+              <% } %>
+          </div>
+
+          <div class="task-footer">
+            <form action="/tasks/toggle-status/<%= task.id %>" method="POST" class="status-toggle">
+              <button type="submit" class="btn btn-secondary btn-sm">
+                <i class="fas <%= task.status === 'Done' ? 'fa-undo' : 'fa-check' %>"></i>
+                <%= task.status==='Done' ? 'Mark Pending' : 'Mark Complete' %>
+              </button>
+            </form>
+          </div>
+      </div>
+      <% }) %>
+  </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="empty-state-content">
+        <i class="fas fa-clipboard-list"></i>
+        <h3>No tasks yet</h3>
+        <p>Create your first task to get started!</p>
+        <button class="btn btn-primary" id="createFirstTask">
+          Create Task
+        </button>
+      </div>
+    </div>
+    <% } %>
+      </section>
+      </div>
+      </main>
+      </div>
+
+      <!-- New Task Modal -->
+      <div class="modal" id="newTaskModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Create New Task</h3>
+            <button class="btn-icon" id="closeModal">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <form action="/tasks/create" method="POST" class="task-form">
+            <div class="form-group">
+              <label class="form-label" for="taskTitle">Task Title</label>
+              <input type="text" id="taskTitle" name="title" class="form-input" required placeholder="Enter task title">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="taskDescription">Description</label>
+              <textarea id="taskDescription" name="description" class="form-input" rows="3"
+                placeholder="Enter task description"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="taskDueDate">Due Date</label>
+              <input type="datetime-local" id="taskDueDate" name="dueDate" class="form-input">
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="cancelTask">Cancel</button>
+              <button type="submit" class="btn btn-primary">
+                Add Task
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <script>
+        // Mobile sidebar toggle
+        const sidebar = document.querySelector('.sidebar');
+        const openSidebarBtn = document.getElementById('openSidebar');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+
+        openSidebarBtn.addEventListener('click', () => {
+          sidebar.classList.add('show');
+        });
+
+        closeSidebarBtn.addEventListener('click', () => {
+          sidebar.classList.remove('show');
+        });
+
+        // Modal handling
+        const modal = document.getElementById('newTaskModal');
+        const newTaskBtn = document.getElementById('newTaskBtn');
+        const createFirstTaskBtn = document.getElementById('createFirstTask');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelTaskBtn = document.getElementById('cancelTask');
+
+        function openModal() {
+          modal.classList.add('show');
+        }
+
+        function closeModal() {
+          modal.classList.remove('show');
+        }
+
+        newTaskBtn?.addEventListener('click', openModal);
+        createFirstTaskBtn?.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelTaskBtn.addEventListener('click', closeModal);
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+      </script>
+</body>
+
+</html>

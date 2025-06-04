@@ -1,0 +1,305 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f2f5;
+  color: #1c1e21;
+  line-height: 1.6;
+}
+
+header {
+  background-color: #1877f2;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+header .nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 1rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+header .nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #1877f2;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #e4e6eb;
+  color: #050505;
+}
+
+.btn-primary:hover {
+  background-color: #166fe5;
+}
+
+.btn-secondary:hover {
+  background-color: #d8dadf;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  color: #1877f2;
+}
+
+.hero-text p {
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  color: #606770;
+}
+
+.hero-text .btn-primary,
+.hero-text .btn-secondary {
+  margin-top: 1rem;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+}
+
+.features .feature {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.features .feature h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #1877f2;
+}
+
+.cta {
+  text-align: center;
+  padding: 3rem 2rem;
+  background-color: white;
+  border-top: 1px solid #ddd;
+}
+
+.cta h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #1877f2;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f0f2f5, #e4e6eb);
+  color: #1c1e21;
+}
+
+.dashboard-wrapper {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 70px;
+  background: #1877f2;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 1rem;
+}
+
+.sidebar-logo {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.sidebar-nav a {
+  color: white;
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+
+.sidebar-nav a:hover {
+  color: #e4e6eb;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding: 1.5rem;
+}
+
+/* Topbar */
+.topbar {
+  background: white;
+  padding: 0.75rem 1.2rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.topbar input {
+  width: 60%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-logout {
+  background: #f02849;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.task-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.task-filter {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Task Cards */
+.task-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-info h3 {
+  color: #1877f2;
+  margin-bottom: 0.4rem;
+}
+
+.status-tag {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.status-tag.done {
+  background: #e6f4ea;
+  color: #42b72a;
+}
+
+.status-tag.pending {
+  background: #e7f3ff;
+  color: #1877f2;
+}
+
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-primary { background: #1877f2; color: white; }
+.btn-secondary { background: #e4e6eb; color: #050505; }
+.btn-danger { background: #f02849; color: white; }
+
+.empty-message {
+  text-align: center;
+  margin-top: 2rem;
+  font-style: italic;
+  color: #666;
+}

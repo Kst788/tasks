@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verified | MyTask</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="verification-container">
+    <div class="verification-content">
+      <i class="fas fa-check-circle verification-icon success"></i>
+      <h1 class="verification-title">Email Verified Successfully!</h1>
+      <p class="verification-message">
+        Welcome <%= name %>! Your email has been successfully verified.
+        You can now log in to your account and start using MyTask.
+      </p>
+      <div class="verification-actions">
+        <a href="/auth/login" class="btn btn-primary">
+          <i class="fas fa-sign-in-alt"></i>
+          Log In Now
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+
+  <style>
+    .verification-container {
+      min-height: calc(100vh - 140px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .verification-content {
+      text-align: center;
+      max-width: 500px;
+      padding: 2rem;
+      background: var(--bg-card);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .verification-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .verification-icon.success {
+      color: var(--success-color);
+    }
+
+    .verification-title {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .verification-message {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .verification-actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .verification-actions .btn {
+      min-width: 120px;
+    }
+  </style>
+</body>
+</html>

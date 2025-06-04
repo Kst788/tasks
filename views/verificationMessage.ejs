@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Email | MyTask</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .verification-container {
+      min-height: calc(100vh - 140px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .verification-content {
+      text-align: center;
+      max-width: 600px;
+      padding: 2rem;
+      background: var(--bg-card);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .verification-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    .verification-icon.warning {
+      color: var(--warning-color);
+    }
+
+    .verification-title {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .verification-message {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .verification-submessage {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .verification-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .verification-actions .btn {
+      min-width: 120px;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+
+    .alert-success {
+      background-color: var(--success-bg);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+
+    .alert-error {
+      background-color: var(--error-bg);
+      color: var(--error-color);
+      border: 1px solid var(--error-color);
+    }
+
+    .troubleshooting {
+      text-align: left;
+      background: var(--bg-secondary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+
+    .troubleshooting h3 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .troubleshooting ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .troubleshooting li {
+      margin-bottom: 0.75rem;
+      padding-left: 1.5rem;
+      position: relative;
+      color: var(--text-secondary);
+    }
+
+    .troubleshooting li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="verification-container">
+    <div class="verification-content">
+      <% if (typeof error !== 'undefined') { %>
+        <i class="fas fa-exclamation-circle verification-icon warning"></i>
+      <% } else { %>
+        <i class="fas fa-envelope verification-icon"></i>
+      <% } %>
+      
+      <h1 class="verification-title">
+        <% if (typeof error !== 'undefined') { %>
+          Email Already Registered
+        <% } else { %>
+          Check Your Email
+        <% } %>
+      </h1>
+
+      <% if (typeof error !== 'undefined') { %>
+        <p class="verification-message"><%= error %></p>
+      <% } else { %>
+        <p class="verification-message">
+          We've sent a verification link to <strong><%= email %></strong>
+        </p>
+        <p class="verification-submessage">
+          Please check your email and click the verification link to activate your account.
+          The verification link will expire in 24 hours.
+        </p>
+      <% } %>
+      
+      <div class="verification-actions">
+        <button id="resendBtn" class="btn btn-secondary" data-email="<%= email %>">
+          <i class="fas fa-paper-plane"></i>
+          Resend Verification Email
+        </button>
+        <a href="/auth/login" class="btn btn-primary">Return to Login</a>
+      </div>
+
+      <div id="resendMessage" class="alert" style="display: none;"></div>
+
+      <div class="troubleshooting">
+        <h3><i class="fas fa-info-circle"></i> Troubleshooting Tips</h3>
+        <ul>
+          <li>Check your spam or junk folder if you don't see the email in your inbox</li>
+          <li>Add no-reply@mytask.com to your contacts to ensure delivery</li>
+          <li>Try clicking the verification link from the same device you signed up on</li>
+          <li>If copying the link, make sure to copy the entire URL</li>
+          <li>Clear your browser cache and cookies if you're having issues</li>
+          <li>If you're still having trouble, click the "Resend Verification Email" button above</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const resendBtn = document.getElementById('resendBtn');
+    const resendMessage = document.getElementById('resendMessage');
+
+    resendBtn.addEventListener('click', async () => {
+      const email = resendBtn.dataset.email;
+      resendBtn.disabled = true;
+      resendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+      try {
+        const response = await fetch('/auth/resend-verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          resendMessage.className = 'alert alert-success';
+          resendMessage.textContent = 'Verification email sent! Please check your inbox and spam folder.';
+        } else {
+          resendMessage.className = 'alert alert-error';
+          resendMessage.textContent = data.error || 'Failed to resend verification email.';
+        }
+      } catch (error) {
+        resendMessage.className = 'alert alert-error';
+        resendMessage.textContent = 'An error occurred. Please try again.';
+      } finally {
+        resendBtn.disabled = false;
+        resendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Resend Verification Email';
+        resendMessage.style.display = 'block';
+        
+        // Scroll the message into view
+        resendMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  </script>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
