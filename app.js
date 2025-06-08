@@ -4,6 +4,7 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 
 const db = require('./config/db');
+const initializeDatabase = require('./config/init-db');
 const taskRoutes = require('./routes/taskRoute');
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/authRoute');
@@ -28,17 +29,19 @@ app.use('/auth', authRoutes);         // ✅ Auth routes
 app.use('/tasks', taskRoutes);        // ✅ Task management
 app.use('/api/users', userRoutes);    // ✅ Optional: for API
 
-// DB test route
-app.get('/db-test', async (req, res) => {
+// Initialize database and start server
+(async () => {
   try {
-    await db.authenticate();
-    res.send('Database connected successfully!');
-  } catch (err) {
-    res.status(500).send('Database connection failed: ' + err.message);
-  }
-});
+    // Initialize database tables
+    await initializeDatabase();
+    console.log('Database initialized successfully');
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to initialize application:', error);
+    process.exit(1);
+  }
+})();
