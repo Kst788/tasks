@@ -3,6 +3,21 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../config/db');
 const sendEmail = require('../utils/sendEmail');
+const { getBaseUrl } = require('../utils/urlHelper');
+
+// Helper function to get base URL
+const getBaseUrl = (req) => {
+  // If BASE_URL is set in environment variables, use it
+  if (process.env.BASE_URL) {
+    return process.env.BASE_URL.replace(/\/$/, '');
+  }
+  // For production, force HTTPS
+  if (process.env.NODE_ENV === 'production') {
+    return `https://${req.get('host')}`;
+  }
+  // For development
+  return `${req.protocol}://${req.get('host')}`;
+};
 
 // GET: Signup Page
 exports.getSignup = (req, res) => {
@@ -42,12 +57,8 @@ exports.postSignup = async (req, res) => {
     );
 
     // Ensure proper URL construction for verification
-    const baseUrl = process.env.BASE_URL || 
-      (process.env.NODE_ENV === 'production' 
-        ? `https://${req.get('host')}` 
-        : `${req.protocol}://${req.get('host')}`);
-    
-    const verifyUrl = `${baseUrl.replace(/\/$/, '')}/auth/verify-email?token=${encodeURIComponent(verificationToken)}&email=${encodeURIComponent(email)}`;
+    const baseUrl = getBaseUrl(req);
+    const verifyUrl = `${baseUrl}/auth/verify-email?token=${encodeURIComponent(verificationToken)}&email=${encodeURIComponent(email)}`;
 
     // Send verification email
     try {
@@ -59,6 +70,8 @@ exports.postSignup = async (req, res) => {
           <p>Please click the link below to verify your email address:</p>
           <a href="${verifyUrl}">Verify Email</a>
           <p>If you didn't create this account, you can safely ignore this email.</p>
+          <p>Or copy and paste this link in your browser:</p>
+          <p>${verifyUrl}</p>
         `
       });
     } catch (emailError) {
@@ -151,7 +164,7 @@ exports.resendVerification = async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     await db.none('UPDATE users SET verification_token = $1 WHERE email = $2', [verificationToken, email]);
 
-    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+    const baseUrl = getBaseUrl(req);
     const verifyUrl = `${baseUrl}/auth/verify-email?token=${verificationToken}&email=${encodeURIComponent(email)}`;
     
     await sendEmail({
