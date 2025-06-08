@@ -14,7 +14,7 @@ exports.postSignup = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     // Check for existing user first
-    const existingUser = await db.oneOrNone('SELECT * FROM "Users" WHERE email = $1', [email]);
+    const existingUser = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
     if (existingUser) {
       if (!existingUser.is_verified) {
         // User exists but isn't verified - offer to resend verification
@@ -36,7 +36,7 @@ exports.postSignup = async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString('hex');
 
     await db.none(
-      `INSERT INTO "Users" (name, email, password, "isVerified", "verificationToken")
+      `INSERT INTO users (name, email, password, is_verified, verification_token)
        VALUES ($1, $2, $3, $4, $5)`,
       [name, email, hashedPassword, false, verificationToken]
     );
@@ -46,6 +46,7 @@ exports.postSignup = async (req, res) => {
     // Make sure there's no double slashes in the URL
     const verifyUrl = `${baseUrl.replace(/\/$/, '')}/auth/verify-email?token=${encodeURIComponent(verificationToken)}&email=${encodeURIComponent(email)}`;
     
+    // Send a more detailed email with troubleshooting instructions
     await sendEmail({
       to: email,
       subject: 'Verify Your Email - MyTask',
@@ -93,10 +94,11 @@ exports.postSignup = async (req, res) => {
 
     res.render('verificationMessage', { email });
   } catch (err) {
-    console.error('Signup Error:', err);
+    console.error('Signup Error:', err.message);
     
     // Handle specific database errors
     if (err.code === '23505' && err.constraint === 'users_email_key') {
+      // Race condition: Another signup with same email happened between our check and insert
       return res.render('signup', {
         error: 'This email address is already registered. Please try logging in or use a different email.',
         values: { name, email }
@@ -206,48 +208,22 @@ exports.getLogin = (req, res) => {
 exports.postLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    console.log('Login attempt for email:', email);
-    
-    if (!process.env.JWT_SECRET) {
-      console.error('JWT_SECRET is not set in environment variables');
-      return res.status(500).send('Server configuration error. Please contact support.');
-    }
+    const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
+    if (!user) return res.status(401).send('User not found.');
 
-    const user = await db.oneOrNone('SELECT * FROM "Users" WHERE email = $1', [email]);
-    
-    if (!user) {
-      console.log('Login failed: User not found for email:', email);
-      return res.status(401).send('Invalid credentials.');
-    }
-
-    if (!user.isVerified) {
-      console.log('Login failed: User not verified for email:', email);
+    if (!user.is_verified) {
       return res.status(401).send('Please verify your email before logging in.');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      console.log('Login failed: Invalid password for email:', email);
-      return res.status(401).send('Invalid credentials.');
-    }
+    if (!isMatch) return res.status(401).send('Invalid credentials.');
 
-    const token = jwt.sign(
-      { id: user.id, email: user.email }, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '1h' }
-    );
-    
-    res.cookie('token', token, { 
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
-      sameSite: 'lax'  // Protects against CSRF
-    });
-    
-    console.log('Login successful for email:', email);
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true });
     res.redirect('/tasks');
   } catch (err) {
-    console.error('Login Error:', err);
-    res.status(500).send('Server error during login. Please try again.');
+    console.error('Login Error:', err.message);
+    res.status(500).send('Server error during login.');
   }
 };
 
