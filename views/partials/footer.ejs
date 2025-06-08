@@ -2,5 +2,33 @@
 <footer class="footer">
   <p>© 2025 MyTask. All rights reserved.</p>
 </footer>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const closeSidebar = document.querySelector('.mobile-close');
+  const sidebar = document.querySelector('.sidebar');
+
+  if (mobileMenu) {
+    mobileMenu.addEventListener('click', () => {
+      sidebar.classList.add('show');
+    });
+  }
+
+  if (closeSidebar) {
+    closeSidebar.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+    });
+  }
+
+  // Close sidebar when clicking outside
+  document.addEventListener('click', (e) => {
+    if (sidebar && sidebar.classList.contains('show') && 
+        !sidebar.contains(e.target) && 
+        !mobileMenu.contains(e.target)) {
+      sidebar.classList.remove('show');
+    }
+  });
+</script>
 </body>
 </html>

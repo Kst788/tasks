@@ -77,25 +77,46 @@ header .nav-links a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 3rem 2rem;
-  gap: 2rem;
-  flex-wrap: wrap;
+  padding: 4rem 2rem;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.
+ 
+   
+    
+
+hero-text {
+  flex: 1;
+  max-width: 600px;
 }
 
 .hero-text h1 {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.2;
   color: #1877f2;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
 }
 
 .hero-text p {
-  margin: 1rem 0;
-  font-size: 1.2rem;
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  margin: 1.5rem 0;
   color: #606770;
+  line-height: 1.6;
 }
 
-.hero-text .btn-primary,
-.hero-text .btn-secondary {
-  margin-top: 1rem;
+.hero-text .buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.hero-image {
+  flex: 1;
+  max-width: 600px;
 }
 
 .hero-image img {
@@ -110,6 +131,8 @@ header .nav-links a:hover {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .features .feature {
@@ -121,7 +144,7 @@ header .nav-links a:hover {
 }
 
 .features .feature h3 {
-  font-size: 1.2rem;
+  font-size: clamp(1.1rem, 2vw, 1.2rem);
   margin-bottom: 0.5rem;
   color: #1877f2;
 }
@@ -134,9 +157,77 @@ header .nav-links a:hover {
 }
 
 .cta h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin-bottom: 1.5rem;
   color: #1877f2;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text .buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-image {
+    max-width: 100%;
+    order: -1;
+  }
+
+  .hero-image img {
+    max-width: 80%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  header {
+    padding: 1rem;
+  }
+
+  header .nav-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  header .nav-links a {
+    margin-left: 0;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 1.5rem 1rem;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+  }
+
+  .features {
+    padding: 2rem 1rem;
+  }
+
+  .cta {
+    padding: 2rem 1rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 footer {
@@ -145,6 +236,7 @@ footer {
   font-size: 0.9rem;
   color: #555;
 }
+
 /* Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 

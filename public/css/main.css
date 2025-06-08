@@ -224,6 +224,119 @@ p {
   .btn {
     width: 100%;
   }
+
+  /* Auth Forms */
+  .auth-container {
+    margin: 1rem;
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  .auth-form {
+    width: 100%;
+  }
+
+  .auth-form input {
+    width: 100%;
+  }
+
+  /* Navigation */
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .nav-links a {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Features Grid */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .feature-card {
+    padding: 1.25rem;
+  }
+
+  /* Content Sections */
+  .content {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  /* Forms */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-input {
+    padding: 0.75rem;
+  }
+
+  /* Buttons */
+  .btn-section {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn-section .btn {
+    width: 100%;
+  }
+
+  /* Error Pages */
+  .error-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .error-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .error-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .form-input {
+    padding: 0.625rem;
+  }
+
+  .error-icon {
+    font-size: 3rem;
+  }
 }
 
 /* Dark Mode Support */

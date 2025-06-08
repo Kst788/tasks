@@ -42,55 +42,33 @@ exports.postSignup = async (req, res) => {
     );
 
     // Ensure proper URL construction for verification
-    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
-    // Make sure there's no double slashes in the URL
-    const verifyUrl = `${baseUrl.replace(/\/$/, '')}/auth/verify-email?token=${encodeURIComponent(verificationToken)}&email=${encodeURIComponent(email)}`;
+    const baseUrl = process.env.BASE_URL || 
+      (process.env.NODE_ENV === 'production' 
+        ? `https://${req.get('host')}` 
+        : `${req.protocol}://${req.get('host')}`);
     
-    // Send a more detailed email with troubleshooting instructions
-    await sendEmail({
-      to: email,
-      subject: 'Verify Your Email - MyTask',
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            .container { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-            .button { display: inline-block; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
-            .note { font-size: 0.9em; color: #666; margin-top: 20px; }
-            .help { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>Welcome to MyTask!</h1>
-            <p>Hello ${name},</p>
-            <p>Thank you for signing up. Please verify your email address to activate your account.</p>
-            
-            <a href="${verifyUrl}" class="button">Verify Email Address</a>
-            
-            <div class="note">
-              <p>If the button above doesn't work, you can copy and paste this link into your browser:</p>
-              <p>${verifyUrl}</p>
-            </div>
-            
-            <div class="help">
-              <p><strong>Having trouble?</strong></p>
-              <ul>
-                <li>Make sure you're clicking the link from the same device you signed up on</li>
-                <li>Try copying and pasting the link directly into your browser</li>
-                <li>If the link expires, you can request a new one from the login page</li>
-                <li>Check if your email client is modifying the link</li>
-              </ul>
-            </div>
-            
-            <p>This verification link will expire in 24 hours for security reasons.</p>
-            <p>If you didn't create an account with MyTask, you can safely ignore this email.</p>
-          </div>
-        </body>
-        </html>
-      `
-    });
+    const verifyUrl = `${baseUrl.replace(/\/$/, '')}/auth/verify-email?token=${encodeURIComponent(verificationToken)}&email=${encodeURIComponent(email)}`;
+
+    // Send verification email
+    try {
+      await sendEmail({
+        to: email,
+        subject: 'Verify your MyTask account',
+        html: `
+          <h1>Welcome to MyTask!</h1>
+          <p>Please click the link below to verify your email address:</p>
+          <a href="${verifyUrl}">Verify Email</a>
+          <p>If you didn't create this account, you can safely ignore this email.</p>
+        `
+      });
+    } catch (emailError) {
+      console.error('Email sending error:', emailError);
+      // Don't expose email error to user, but log it
+      return res.render('signup', {
+        error: 'Account created but we could not send the verification email. Please try requesting a new verification email.',
+        values: { name, email }
+      });
+    }
 
     res.render('verificationMessage', { email });
   } catch (err) {
@@ -219,7 +197,12 @@ exports.postLogin = async (req, res) => {
     if (!isMatch) return res.status(401).send('Invalid credentials.');
 
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      sameSite: 'lax',
+      maxAge: 3600000 // 1 hour in milliseconds
+    });
     res.redirect('/tasks');
   } catch (err) {
     console.error('Login Error:', err.message);

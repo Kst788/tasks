@@ -573,24 +573,19 @@ input[type="date"].form-input[min]:invalid + .error-message {
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .mobile-menu,
-  .mobile-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
   }
 
   .sidebar {
     position: fixed;
-    left: -100%;
+    left: -280px;
     top: 0;
-    width: 280px;
-    height: 100%;
-    background: white;
+    bottom: 0;
+    z-index: 1000;
     transition: left 0.3s ease;
-    z-index: 1001;
   }
 
   .sidebar.show {
@@ -598,35 +593,84 @@ input[type="date"].form-input[min]:invalid + .error-message {
     box-shadow: var(--shadow-lg);
   }
 
-  .modal-content {
-    margin: var(--spacing-sm);
-    padding: var(--spacing-lg);
+  .main-content {
+    margin-left: 0;
   }
 
-  .modal-header h3 {
-    font-size: 1.25rem;
-  }
-
-  .dashboard-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .main-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--spacing-sm);
-  }
-
-  .search-bar {
-    width: 100%;
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
   .tasks-grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .quick-tasks-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+
+  .search-bar {
+    max-width: 100%;
+  }
+
+  .stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .mobile-menu {
+    display: block;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 999;
+    background: var(--primary-color);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    border: none;
+    cursor: pointer;
+  }
+
+  .mobile-close {
+    display: block;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: var(--spacing-md);
+  }
+
+  .content-container {
+    padding: 0;
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+
+  .stat-icon {
+    margin: 0 auto;
   }
 }
 
