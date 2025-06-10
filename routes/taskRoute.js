@@ -6,6 +6,7 @@ const authenticate = require('../middleware/authMiddleware'); // ✅ must import
 // ✅ apply middleware to protect all task routes
 router.get('/', authenticate, taskController.getTasks);
 router.post('/create', authenticate, taskController.createTask);
+router.get('/edit/:id', authenticate, taskController.getEditTask);
 router.post('/update/:id', authenticate, taskController.updateTask);
 router.get('/delete/:id', authenticate, taskController.deleteTask);
 

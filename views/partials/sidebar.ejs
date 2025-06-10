@@ -1,0 +1,33 @@
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <a href="/tasks">
+      <strong>MyTask</strong>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="/tasks" class="<%= path === '/tasks' ? 'active' : '' %>">
+      <i class="fas fa-home"></i>
+      Dashboard
+    </a>
+    <a href="/tasks" class="<%= path === '/tasks/completed' ? 'active' : '' %>">
+      <i class="fas fa-check-circle"></i>
+      Completed Tasks
+    </a>
+    <a href="/profile" class="<%= path === '/profile' ? 'active' : '' %>">
+      <i class="fas fa-user"></i>
+      Profile
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <i class="fas fa-user-circle"></i>
+      <span><%= userEmail %></span>
+    </div>
+    <a href="/auth/logout" class="btn-logout">
+      <i class="fas fa-sign-out-alt"></i>
+      Logout
+    </a>
+  </div>
+</div> 

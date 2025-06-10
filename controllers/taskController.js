@@ -8,7 +8,8 @@ exports.getTasks = async (req, res) => {
 
     res.render('dashboard', {
       tasks,
-      userEmail: req.user.email
+      userEmail: req.user.email,
+      path: '/tasks'
     });
   } catch (error) {
     console.error('Get Tasks Error:', error.message);
@@ -22,12 +23,28 @@ exports.createTask = async (req, res) => {
     const userId = req.user.id;
     const { title, description, dueDate, dueTime, status } = req.body;
 
-    // Combine date & time if both provided
+    // Improved date & time handling
     let dueDateTime = null;
-    if (dueDate && dueTime) {
-      dueDateTime = new Date(`${dueDate}T${dueTime}`);
-    } else if (dueDate) {
-      dueDateTime = new Date(dueDate);
+    if (dueDate) {
+      try {
+        if (dueTime) {
+          // Make sure we have valid date and time values
+          const dateTimeString = `${dueDate}T${dueTime}`;
+          const parsedDate = new Date(dateTimeString);
+          if (!isNaN(parsedDate.getTime())) {
+            dueDateTime = parsedDate;
+          }
+        } else {
+          // Handle date only
+          const parsedDate = new Date(dueDate);
+          if (!isNaN(parsedDate.getTime())) {
+            dueDateTime = parsedDate;
+          }
+        }
+      } catch (dateError) {
+        console.error('Date parsing error:', dateError);
+        // Continue with null dueDateTime if date parsing fails
+      }
     }
 
     const finalStatus = status || 'pending';
@@ -79,5 +96,42 @@ exports.deleteTask = async (req, res) => {
   } catch (error) {
     console.error('Delete Task Error:', error.message);
     res.status(500).send('Failed to delete task');
+  }
+};
+
+// Get task for editing
+exports.getEditTask = async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    const userId = req.user.id;
+
+    const task = await db.oneOrNone(
+      'SELECT * FROM tasks WHERE id = $1 AND user_id = $2',
+      [taskId, userId]
+    );
+
+    if (!task) {
+      return res.status(404).send('Task not found');
+    }
+
+    // Format the date and time for the form
+    let dateValue = '';
+    let timeValue = '';
+    if (task.due_date) {
+      const dueDate = new Date(task.due_date);
+      dateValue = dueDate.toISOString().split('T')[0];
+      timeValue = dueDate.toTimeString().split(' ')[0].slice(0, 5);
+    }
+
+    res.render('editTask', {
+      task,
+      dateValue,
+      timeValue,
+      userEmail: req.user.email,
+      path: '/tasks/edit'
+    });
+  } catch (error) {
+    console.error('Get Edit Task Error:', error.message);
+    res.status(500).send('Failed to get task for editing');
   }
 };
