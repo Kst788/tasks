@@ -23,28 +23,7 @@
       Don't have an account? <a href="/auth/signup">Sign up</a>
     </p>
   </main>
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
 
-      const email = document.querySelector('input[name="email"]').value;
-      const password = document.querySelector('input[name="password"]').value;
-
-      const response = await fetch('/auth/login', {
-        method: 'POST',
-        credentials: 'include', // ✅ Important for cookies (auth)
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (response.ok) {
-        window.location.href = '/tasks'; // ✅ redirect after login
-      } else {
-        const text = await response.text();
-        alert('Login failed: ' + text);
-      }
-    });
-  </script>
   <%- include('partials/footer') %>
 </body>
 </html>
